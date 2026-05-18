@@ -17,8 +17,8 @@ VIDEO_EXTS = {".mp4", ".avi", ".mov", ".mkv"}
 AUDIO_EXTS = {".mp3", ".wav", ".ogg", ".flac", ".m4a", ".aac"}
 
 # ---- HLS video settings -------------------------------------------------
-HLS_SEGMENT_SECONDS = 2          # segment duration → ~4-6s glass-to-glass latency
-HLS_LIST_SIZE = 6                # number of segments visible in playlist
+HLS_SEGMENT_SECONDS = 4          # segment duration → ~8-12s glass-to-glass latency, smoother playback
+HLS_LIST_SIZE = 10               # number of segments visible in playlist (~40s window)
 HLS_VIDEO_BITRATE_K = 1500       # kbps; used during one-time normalization
 HLS_MAX_WIDTH = 1280
 HLS_MAX_HEIGHT = 720
@@ -552,13 +552,14 @@ _HLS_PLAYER_SCRIPT = """
   function startPlay() { video.play().catch(function(){}); }
   if (window.Hls && Hls.isSupported()) {
     var hls = new Hls({
-      liveSyncDuration: 4,
-      liveMaxLatencyDuration: 12,
+      liveSyncDuration: 10,
+      liveMaxLatencyDuration: 30,
       maxBufferLength: 30,
       backBufferLength: 10,
       manifestLoadingMaxRetry: 6,
       levelLoadingMaxRetry: 6,
-      fragLoadingMaxRetry: 6
+      fragLoadingMaxRetry: 6,
+      lowLatencyMode: false
     });
     hls.loadSource(src);
     hls.attachMedia(video);
@@ -643,13 +644,14 @@ def index():
             function startPlay() { video.play().catch(function(){}); }
             if (window.Hls && Hls.isSupported()) {
               var hls = new Hls({
-                liveSyncDuration: 4,
-                liveMaxLatencyDuration: 12,
+                liveSyncDuration: 10,
+                liveMaxLatencyDuration: 30,
                 maxBufferLength: 30,
                 backBufferLength: 10,
                 manifestLoadingMaxRetry: 6,
                 levelLoadingMaxRetry: 6,
-                fragLoadingMaxRetry: 6
+                fragLoadingMaxRetry: 6,
+                lowLatencyMode: false
               });
               hls.loadSource(src);
               hls.attachMedia(video);
