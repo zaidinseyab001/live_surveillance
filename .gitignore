@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+surveillance/
+voice analysis/
+
 # Distribution / packaging
 .Python
 build/
